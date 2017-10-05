@@ -1,3 +1,4 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -6,59 +7,60 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
 
-@WebServlet("/ImieNazwisko")
-public class ImieNazwisko extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-
-        PrintWriter writer = response.getWriter();
-
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String teamName = request.getParameter("teamName");
-
-        writer.println("<!DOCTYPE html>");
-        writer.println("<html>");
-        writer.println("<body>");
-        writer.println("<table border=\"3\">");
-        writer.println("<tr>");
-        writer.println("<th>Parametr</th>");
-        writer.println("<th>Wartosc parametru</th>");
-        writer.println("</tr>");
-        writer.println("<tr>");
-        writer.println("<th>Imie</th>");
-        writer.println("<th>" + firstName + "</th>");
-        writer.println("</tr>");
-        writer.println("<tr>");
-        writer.println("<th>Nazwisko</th>");
-        writer.println("<th>" + lastName + "</th>");
-        writer.println("</tr>");
-        writer.println("<tr>");
-        writer.println("<th>Nazwa grupy</th>");
-        writer.println("<th>" + teamName + "</th>");
-        writer.println("</tr>");
-        writer.println("</table>");
-    }
+@WebServlet("/AleksandraMorawska")
+public class AleksandraMorawska extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String teamName = request.getParameter("teamName");
-
         PrintWriter writer = response.getWriter();
-        LocalDateTime localDateTime = LocalDateTime.now();
-        writer.println(firstName);
-        writer.println(lastName);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formatDateTime = now.format(formatter);
+        writer.println("Aleksandra Morawska");
         writer.println("</br>");
-        writer.println(teamName);
+        writer.println("Okularnicy");
         writer.println("</br>");
-        writer.println(localDateTime);
+        writer.println(formatDateTime);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+
+        writer.println("<!DOCTYPE html>");
+        writer.println("<html>");
+        writer.println("<body>");
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String parameterName = parameterNames.nextElement().toString();
+            writer.print("<tr>");
+            writer.println("<td>" + parameterName + "</td>");
+            writer.print("</tr>");
+            String[] parameterValues = request.getParameterValues(parameterName);
+            writer.println("<ol>");
+
+            for (int i = 0; i < parameterValues.length; i++) {
+                String parameterValue = parameterValues[i];
+                writer.println("<tr>");
+                writer.println("<th>" + parameterValue + "</th>");
+                writer.println("</tr>");
+                writer.println("<tr>");
+            }
+            writer.println("</ol>");
+        }
+        writer.println("<body>");
+        writer.println("<html>");
     }
 }
+
+
+
